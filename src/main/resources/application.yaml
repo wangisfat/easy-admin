@@ -1,0 +1,95 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    min-response-size: 1KB
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+  tomcat:
+    max-connections: 8192
+    uri-encoding: UTF-8
+    threads:
+      min-spare: 50
+      max: 1000
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/laker?serverTimezone=GMT%2B8&characterEncoding=utf8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 1
+      min-idle: 5
+      max-active: 20
+      test-on-borrow: true
+      validation-query: select 1
+  profiles:
+    active: dev
+  task:
+    execution:
+      pool:
+        max-size: 10
+        queue-capacity: 1
+      thread-name-prefix: laker-
+  freemarker:
+    suffix: .ftl
+  servlet:
+    multipart:
+      max-file-size: 20MB
+mybatis-plus:
+  type-aliases-package: org.snaker.engine.entity
+  # 支持统配符 * 或者 ; 分割
+  typeEnumsPackage: com.laker.admin.module.enums
+  # 配置日志 #仅控制台输出的日志
+  #  configuration:
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+knife4j:
+  # 开启增强
+  enable: true
+  # 不是很重要的环境，但是又不想暴露文档可以用这个
+  basic:
+    # 开启basic认证 输入用户名密码才能访问/doc.html
+    enable: false
+    # 认证用户名
+    password: laker
+    # 认证密码
+    username: laker
+  # 是否生产环境 屏蔽所有资源接口,一般这个用于生产环境 屏蔽资源，与上面二选一
+  # production: true
+javamelody:
+  enabled: true
+  # sa-token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: LakerToken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 1800
+  # token临时有效期 [指定时间内无操作就视为token过期] (单位: 秒), 默认-1 代表不限制
+  activity-timeout: 1800
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  allow-concurrent-login: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: simple-uuid
+  # 是否打印操作日志
+  is-log: false
+  is-print: false
+laker:
+  # web防火墙配置
+  waf:
+    sql-enabled: false
+    xss-enabled: false
+    excludes: /flow/*,/sys/nginx/*
+  # 文件服务endpoint
+  oss-file:
+    domain: http://localhost:8080
+# actuator
+management:
+  endpoint:
+    health:
+      show-details: always
+info:
+  author: laker
+  version: 1.0.1
